@@ -30,12 +30,18 @@ class AlmacenViewSet(viewsets.ModelViewSet):
     
 class PredictionViewSet(viewsets.ViewSet):
     def list(self, request):
+        
+        # Obtener los valores dinámicos desde la aplicación externa
+        start_date = request.GET.get('start_date')
+        num_periods = int(request.GET.get('num_periods'))
+        frequency = request.GET.get('frequency')
+        
         # Realizar la solicitud a la API para obtener los datos
         url = 'http://127.0.0.1:8000/api/movimientos/'
         response = requests.get(url)
         data = response.json()
 
         # Pasar los datos a la función predecir_ventas
-        predictions = predecir_ventas(data)
+        predictions = predecir_ventas(data, start_date, num_periods, frequency)
         serialized_predictions = serialize_predictions(predictions)  # Función para serializar los resultados según tus necesidades
         return Response(serialized_predictions)

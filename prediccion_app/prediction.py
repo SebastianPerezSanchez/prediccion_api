@@ -3,7 +3,7 @@ from prophet import Prophet
 import datetime
 
 
-def predecir_ventas(data): 
+def predecir_ventas(data, start_date, num_periods, frequency): 
     # Convertir los documentos a un DataFrame de pandas
     data = pd.DataFrame(data)
 
@@ -31,7 +31,7 @@ def predecir_ventas(data):
             model.fit(monthly_data)
 
             # Generar fechas futuras para predicción
-            future_dates = pd.date_range(start='2023-06-01', periods=4, freq='3M')
+            future_dates = pd.date_range(start= start_date, periods= num_periods, freq= frequency)
 
             # Crear un DataFrame con las fechas futuras
             future_dataframe = pd.DataFrame({'ds': future_dates})
