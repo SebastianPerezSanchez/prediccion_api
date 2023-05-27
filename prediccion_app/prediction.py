@@ -52,8 +52,8 @@ def predecir_ventas(data, start_date, num_periods, frequency):
     all_predictions = all_predictions.dropna(subset=['producto'])
     
     # Filtrar productos
-    filtered_predictions = all_predictions[all_predictions['yhat'] >= 100]   
+    #filtered_predictions = all_predictions[all_predictions['yhat'] >= 100]   
     
     # Retornar los pronósticos
-    return filtered_predictions
+    return all_predictions
     
