@@ -2,8 +2,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 import requests
 
-from prediccion_app.models import Movimientos, Almacen
-from prediccion_app.serializers import MovimientosSerializer, AlmacenSerializer
+from prediccion_app.models import Movimientos, Almacen, Productos
+from prediccion_app.serializers import MovimientosSerializer, AlmacenSerializer, ProductosSerializer
 from prediccion_app.prediction import predecir_ventas
 
 def serialize_predictions(predictions):
@@ -17,7 +17,9 @@ def serialize_predictions(predictions):
         serialized_predictions.append(serialized_prediction)
     return serialized_predictions
 
-
+class ProductosViewSet(viewsets.ModelViewSet):
+    queryset = Productos.objects.all()
+    serializer_class = ProductosSerializer
 
 
 class MovimientosViewSet(viewsets.ModelViewSet):

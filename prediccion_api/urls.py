@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from prediccion_app.views import MovimientosViewSet, AlmacenViewSet, PredictionViewSet
+from prediccion_app.views import MovimientosViewSet, AlmacenViewSet, PredictionViewSet, ProductosViewSet
 
 router = DefaultRouter()
+
+router.register('productos', ProductosViewSet, basename='productos')
 router.register('movimientos', MovimientosViewSet, basename='movimientos')
 router.register('almacen', AlmacenViewSet, basename='almacen')
 router.register('prediction', PredictionViewSet, basename='prediction')

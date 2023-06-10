@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from prediccion_app.models import Movimientos, Almacen
+from prediccion_app.models import Movimientos, Almacen, Productos
 from django.shortcuts import get_object_or_404
 from bson import ObjectId
 
@@ -24,3 +24,9 @@ class PredictionSerializer(serializers.Serializer):
 def serialize_predictions(predictions):
     serializer = PredictionSerializer(predictions, many = True)
     return serializer.data
+
+class ProductosSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Productos
+        fields = ('_id','nombre', 'precio', 'codigo')
