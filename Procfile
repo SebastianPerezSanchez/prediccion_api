@@ -1,0 +1,1 @@
+web: gunicorn prediccion_api.wsgi
