@@ -16,6 +16,9 @@ Including another URLconf
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from prediccion_app.views import MovimientosViewSet, AlmacenViewSet, PredictionViewSet, ProductosViewSet
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 router = DefaultRouter()
 
@@ -27,4 +30,4 @@ router.register('prediction', PredictionViewSet, basename='prediction')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
