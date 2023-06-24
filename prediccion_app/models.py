@@ -19,7 +19,7 @@ class Movimientos(models.Model):
     cantidad = models.IntegerField()
     tipo_movimiento = models.CharField(max_length = 500)
     codigo_recibido = models.CharField(max_length = 500)
-    almacen = models.ObjectIdField()
+    almacen = models.CharField(max_length = 500)
     
     class Meta:
         db_table = 'movimientos'

@@ -37,6 +37,7 @@ class PredictionViewSet(viewsets.ViewSet):
         start_date = request.GET.get('start_date')
         num_periods = int(request.GET.get('num_periods'))
         frequency = request.GET.get('frequency')
+        almacen = request.GET.get('almacen')
         
         # Realizar la solicitud a la API para obtener los datos
         url = 'http://127.0.0.1:8000/api/movimientos/'
@@ -44,6 +45,6 @@ class PredictionViewSet(viewsets.ViewSet):
         data = response.json()
 
         # Pasar los datos a la función predecir_ventas
-        predictions = predecir_ventas(data, start_date, num_periods, frequency)
+        predictions = predecir_ventas(data, start_date, num_periods, frequency, almacen)
         serialized_predictions = serialize_predictions(predictions)  # Función para serializar los resultados según tus necesidades
         return Response(serialized_predictions)

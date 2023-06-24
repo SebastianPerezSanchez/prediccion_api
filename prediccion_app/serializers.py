@@ -12,7 +12,7 @@ class MovimientosSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movimientos
-        fields = ('fecha', 'producto', 'cantidad')
+        fields = ('fecha', 'producto', 'cantidad', 'almacen')
 
 class PredictionSerializer(serializers.Serializer):
     producto = serializers.CharField()

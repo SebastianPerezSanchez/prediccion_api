@@ -3,7 +3,7 @@ from prophet import Prophet
 import datetime
 
 
-def predecir_ventas(data, start_date, num_periods, frequency): 
+def predecir_ventas(data, start_date, num_periods, frequency, almacen): 
     # Convertir los documentos a un DataFrame de pandas
     data = pd.DataFrame(data)
 
@@ -17,33 +17,36 @@ def predecir_ventas(data, start_date, num_periods, frequency):
     for producto in data['producto'].unique():
         # Filtrar los datos por producto
         product_data = data[data['producto'] == producto]
+        
+        if almacen:
+            product_data = product_data[product_data['almacen'] == almacen]
 
-        # Agrupar los datos por mes y calcular la suma de las ventas diarias para cada mes
-        monthly_data = product_data.groupby(pd.Grouper(key='fecha', freq='M')).sum().reset_index()
+            # Agrupar los datos por mes y calcular la suma de las ventas diarias para cada mes
+            monthly_data = product_data.groupby(pd.Grouper(key='fecha', freq='M')).sum().reset_index()
 
-        # Verificar filas no nulas
-        if monthly_data['cantidad'].count() >= 2:
-            # Renombrar las columnas a "ds" y "y"
-            monthly_data.rename(columns={'fecha': 'ds', 'cantidad': 'y'}, inplace=True)
+            # Verificar filas no nulas
+            if monthly_data['cantidad'].count() >= 2:
+                # Renombrar las columnas a "ds" y "y"
+                monthly_data.rename(columns={'fecha': 'ds', 'cantidad': 'y'}, inplace=True)
 
-            # Inicializar y ajustar el modelo Prophet
-            model = Prophet()
-            model.fit(monthly_data)
+                # Inicializar y ajustar el modelo Prophet
+                model = Prophet()
+                model.fit(monthly_data)
 
-            # Generar fechas futuras para predicción
-            future_dates = pd.date_range(start= start_date, periods= num_periods, freq= frequency)
+                # Generar fechas futuras para predicción
+                future_dates = pd.date_range(start= start_date, periods= num_periods, freq= frequency)
 
-            # Crear un DataFrame con las fechas futuras
-            future_dataframe = pd.DataFrame({'ds': future_dates})
+                # Crear un DataFrame con las fechas futuras
+                future_dataframe = pd.DataFrame({'ds': future_dates})
 
-            # Generar pronósticos mensuales
-            forecast = model.predict(future_dataframe)
+                # Generar pronósticos mensuales
+                forecast = model.predict(future_dataframe)
 
-            # Agregar la columna "producto" al pronóstico
-            forecast['producto'] = producto
+                # Agregar la columna "producto" al pronóstico
+                forecast['producto'] = producto
 
-            # Agregar los pronósticos a la lista de pronósticos
-            predictions.append(forecast[['producto', 'ds', 'yhat', 'yhat_lower', 'yhat_upper']])
+                # Agregar los pronósticos a la lista de pronósticos
+                predictions.append(forecast[['producto', 'ds', 'yhat', 'yhat_lower', 'yhat_upper']])
 
     # Concatenar los pronósticos de todos los productos
     all_predictions = pd.concat(predictions)
@@ -52,8 +55,8 @@ def predecir_ventas(data, start_date, num_periods, frequency):
     all_predictions = all_predictions.dropna(subset=['producto'])
     
     # Filtrar productos
-    #filtered_predictions = all_predictions[all_predictions['yhat'] >= 100]   
+    filtered_predictions = all_predictions[all_predictions['yhat'] >= 100]   
     
     # Retornar los pronósticos
-    return all_predictions
+    return filtered_predictions
     
